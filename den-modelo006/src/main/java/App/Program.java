@@ -7,6 +7,7 @@ import Model.TaxPayer;
 import lombok.Cleanup;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Program  {
@@ -22,7 +23,7 @@ public class Program  {
         System.out.println("Cuantas personas seran : ");
         int cantidad = can.nextInt();
 
-        ArrayList<TaxPayer> listado =  new ArrayList();
+        List<TaxPayer> listado =  new ArrayList();
 
         for (int i = 1; i <= cantidad ; i++) {
 
