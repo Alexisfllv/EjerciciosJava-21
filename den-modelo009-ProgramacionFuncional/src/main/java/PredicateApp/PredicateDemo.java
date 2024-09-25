@@ -6,6 +6,7 @@ public class PredicateDemo {
 
     //PREDICATE devuelve un Bolean
 
+    //.test();
     // x =  parametro
     // -> operador
     // x=5 expresion que evalua
