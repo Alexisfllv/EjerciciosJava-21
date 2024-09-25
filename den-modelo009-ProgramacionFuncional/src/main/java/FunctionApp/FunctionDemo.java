@@ -95,9 +95,9 @@ public class FunctionDemo {
         //
         System.out.println(listadoEmpleados);
 
-        Map<Integer,Employee> mapeodeEmpleados = listadoEmpleados.stream().collect(Collectors.toMap(e -> e.getIdEmployee(), e -> e));;
+        Map<Integer,Employee> mapeodeEmpleados = listadoEmpleados.stream().collect(Collectors.toMap(e -> e.getIdEmployee(), e -> e));
         
-        Map<Integer,Employee> mapeodeEmpleados2 = listadoEmpleados.stream().collect(Collectors.toMap(Employee::getIdEmployee, Function.identity()));;
+        Map<Integer,Employee> mapeodeEmpleados2 = listadoEmpleados.stream().collect(Collectors.toMap(Employee::getIdEmployee, Function.identity()));
         System.out.println(mapeodeEmpleados);
         //
 
@@ -111,8 +111,30 @@ public class FunctionDemo {
 
     }
 
+    //
+    private void m4(){
+
+        //metodo statico
+        Function<Integer , Integer> f1= Function.identity();
+        Function<Integer , Integer> f2= Function.identity();
+        Function<Integer , Integer> f3= Function.identity();
+
+        //instancia
+        Function<Integer , Integer> f4= t -> t;
+        Function<Integer , Integer> f5= t -> t;
+        Function<Integer , Integer> f6= t -> t;
+
+        System.out.println(f1);
+        System.out.println(f2);
+        System.out.println(f3);
+        System.out.println("/////////////////////////");
+        System.out.println(f4);
+        System.out.println(f5);
+        System.out.println(f6);
+    }
+
     public static void main(String[] args) {
         FunctionDemo dm =  new FunctionDemo();
-        dm.m3();
+        dm.m4();
     }
 }
