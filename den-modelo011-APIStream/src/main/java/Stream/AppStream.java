@@ -3,10 +3,12 @@ package Stream;
 import java.time.Period;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AppStream {
 
@@ -53,6 +55,109 @@ public class AppStream {
                 .forEach(employee -> System.out.println(employee));
     }
 
+    //
+    private void m4getOldJob(List<Employee> listado){
+
+        listado.stream()
+                .sorted(Comparator.comparing(Employee::getSalaryEmployee).reversed())
+                .limit(1)
+                .forEach(System.out::println);
+
+    }
+
+    //campos calculados
+
+    private void m5getMaxminSalary(List<Employee> listado){
+        double maximo =  listado.stream()
+                .mapToDouble(e -> e.getSalaryEmployee())
+                .max()
+                .orElse(0);
+
+        double minimo =  listado.stream()
+                .mapToDouble(e -> e.getSalaryEmployee())
+                .min()
+                .orElse(0);
+
+        //maximo mas el resto de valores
+        Employee maxemp =  listado.stream()
+                .max(Comparator.comparing(employee -> employee.getSalaryEmployee()))
+                .orElse(new Employee());
+
+        System.out.println(maximo);
+        System.out.println(minimo);
+        System.out.println(maxemp);
+    }
+
+    //Promedio de precios
+    public void m6getAverage(List<Employee> listado){
+
+        double promedio =  listado.stream()
+                .mapToDouble(value -> value.getSalaryEmployee())
+                .average()
+                .orElse(0);
+
+        System.out.println("Promedio es : " + promedio);
+    }
+
+    //Estadisticas totales
+    public void m7getSumary(List<Employee> listado){
+
+        //
+        DoubleSummaryStatistics estadisticas =  listado.stream()
+                .mapToDouble(e -> e.getSalaryEmployee())
+                .summaryStatistics();
+
+        //
+        //System.out.println(estadisticas);
+        System.out.println("Suma de salarios : " + estadisticas.getSum());
+    }
+
+    //Distinct
+    public void m8getDistinct(List<Employee> listado){
+        listado.stream()
+                .distinct()
+                .forEach(System.out::println);
+    }
+
+    //Contar , con filtro y solo
+    public void m9getCount(List<Employee> listado){
+
+        double cantdad1 =  listado.stream()
+                .count();
+
+        int cantidad2 =  listado.size();
+
+        System.out.println("con filtros : " + cantdad1);
+        System.out.println("sin filtros : " + cantidad2);
+    }
+
+    //sky para saltar los elementos , limit para recuperar elementos
+    private void m10SkypLimit(List<Employee> listado){
+        List<Employee> listadoSaltar =  listado.stream()
+                                        .skip(5)
+                                                .collect(Collectors.toList());
+        List<Employee> listadoLimitar = listado.stream()
+                        .limit(5)
+                                .collect(Collectors.toList());
+
+        listadoSaltar.forEach(e -> System.out.println(e));
+
+        listadoLimitar.forEach(System.out::println);
+
+        //metodo listado de paginacion
+        int skyp = 6;
+        int limit = 2;
+
+        List<Employee> paginacion = listado.stream()
+                .skip(skyp * limit) //0
+                .limit(limit)           //2
+                .collect(Collectors.toList());
+
+        System.out.println("paginacion");
+        paginacion.forEach(System.out::println);
+    }
+
+
     public static void main(String[] args) {
         //
         AppStream aps = new AppStream();
@@ -68,9 +173,9 @@ public class AppStream {
         Employee e8 = new Employee(8, "Emma White", "Financial Analyst", 5200.00, "Finance");
         Employee e9 = new Employee(9, "David Brown", "Sales Executive", 4700.00, "Sales");
         Employee e10 = new Employee(10, "Sophia Green", "Legal Advisor", 6100.00, "Legal");
-        //Employee e11 = new Employee(10, "Sophia Green", "Legal motor", 6100.00, "Legal");
+        Employee e11 = new Employee(10, "Sophia Green", "Legal Advisorr", 6100.00, "Legal");
 
-        List<Employee> listadoEmpleados = Arrays.asList(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10);
+        List<Employee> listadoEmpleados = Arrays.asList(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11);
 
         //busqueda filter
         aps.m1getDevs(listadoEmpleados,"Data Analyst");
@@ -80,6 +185,33 @@ public class AppStream {
 
         //listado de empleados por condicion
         aps.m3getAdults(listadoEmpleados);
+
+        //listar de mayor a menor  , obtener el primer valor
+        System.out.println("salary top");
+        aps.m4getOldJob(listadoEmpleados);
+
+
+        //campos calculados
+        //MAXIMO Y MINIMO EN Salarios
+        aps.m5getMaxminSalary(listadoEmpleados);
+
+        //Promedio de salarios
+        aps.m6getAverage(listadoEmpleados);
+
+        //Estadisticas de Salario
+        aps.m7getSumary(listadoEmpleados);
+
+        //Distinct , por equals has code en id
+        aps.m8getDistinct(listadoEmpleados);
+
+        //Contar elementos
+        aps.m9getCount(listadoEmpleados);
+
+        //saltar elementos
+        aps.m10SkypLimit(listadoEmpleados);
+
+
+
 
     }
 }
