@@ -1,10 +1,7 @@
 package Stream;
 
 import java.time.Period;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.DoubleSummaryStatistics;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -145,7 +142,7 @@ public class AppStream {
         listadoLimitar.forEach(System.out::println);
 
         //metodo listado de paginacion
-        int skyp = 6;
+        int skyp = 2;
         int limit = 2;
 
         List<Employee> paginacion = listado.stream()
@@ -157,6 +154,69 @@ public class AppStream {
         paginacion.forEach(System.out::println);
     }
 
+    //GETanyYouger
+    private void m11getAnyYounger(List<Employee> listado){
+
+        //prediacte
+        Predicate<Employee> isYoug =  employee -> employee.getSalaryEmployee()> 5000;
+
+        boolean valor =  listado.stream()
+                .anyMatch(isYoug);
+
+        System.out.println("hay un valor mayor a 5000 ?  : " + valor);
+    }
+
+    //map
+    private void m12map (List<Employee> listado){
+
+        listado.stream()
+                .map(e -> {
+                    e.setSalaryEmployee(e.getSalaryEmployee() * 0.15 + e.getSalaryEmployee());
+                    return "Employee(idEmployee=" + e.getIdEmployee() +
+                            ", jobEmployee=" + e.getJobEmployee() +
+                            ", salaryEmployee=" + e.getSalaryEmployee() + ")";
+                })
+                .forEach(System.out::println);
+    }
+
+    private void m13flatMap (List<Employee> listado){
+        listado.stream()
+                .flatMap(e -> {
+                    e.setSalaryEmployee(e.getSalaryEmployee() * 1.10);
+                    //retornamos
+                    return Stream.of(e.getSalaryEmployee(),e.getJobEmployee(),"REGISTROS");
+                })
+                .forEach(e -> System.out.println(e));
+    }
+
+    //
+    private void m14GroupBy(List<Employee> listado){
+          Map<String , List<Employee>> byDepartment =  listado.stream()
+                .collect(Collectors.groupingBy(employee -> employee.getDepartmentEmployee()));
+
+          //
+        System.out.println(byDepartment);
+
+        // con 2 agrupaciones
+        Map<String , Map<String, List<Employee>>> bydepartamentJob =  listado.stream()
+                .collect(Collectors.groupingBy(Employee -> Employee.getDepartmentEmployee() , Collectors.groupingBy(Employee -> Employee.getJobEmployee())));
+
+        System.out.println(bydepartamentJob);
+
+        //var
+        var bydepartamentJob2 =  listado.stream()
+                .collect(Collectors.groupingBy(Employee -> Employee.getDepartmentEmployee() , Collectors.groupingBy(Employee -> Employee.getJobEmployee())));
+
+        System.out.println(bydepartamentJob2);
+    }
+
+    // m15
+    private void m15Order(){
+        Stream<String> st =  Stream.of("z","a","v","y");
+
+        st.sorted(Comparator.reverseOrder())
+                .forEach(e -> System.out.println(e));
+    }
 
     public static void main(String[] args) {
         //
@@ -164,7 +224,7 @@ public class AppStream {
 
         //
         Employee e1 = new Employee(1, "John Doe", "Software Engineer", 5500.00, "IT");
-        Employee e2 = new Employee(2, "Jane Smith", "Project Manager", 6500.00, "Management");
+        Employee e2 = new Employee(2, "Jane Smith", "Software Engineer", 6500.00, "Management");
         Employee e3 = new Employee(3, "Carlos Perez", "Data Analyst", 4800.00, "Analytics");
         Employee e4 = new Employee(4, "Linda Kim", "UX Designer", 5300.00, "Design");
         Employee e5 = new Employee(5, "Raj Patel", "DevOps Engineer", 5900.00, "IT");
@@ -175,7 +235,7 @@ public class AppStream {
         Employee e10 = new Employee(10, "Sophia Green", "Legal Advisor", 6100.00, "Legal");
         Employee e11 = new Employee(10, "Sophia Green", "Legal Advisorr", 6100.00, "Legal");
 
-        List<Employee> listadoEmpleados = Arrays.asList(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11);
+        List<Employee> listadoEmpleados = Arrays.asList(e1,e2,e10,e11);
 
         //busqueda filter
         aps.m1getDevs(listadoEmpleados,"Data Analyst");
@@ -210,6 +270,20 @@ public class AppStream {
         //saltar elementos
         aps.m10SkypLimit(listadoEmpleados);
 
+        //any match
+        aps.m11getAnyYounger(listadoEmpleados);
+
+        //map
+        aps.m12map(listadoEmpleados);
+
+        //flatmap aplana listas aninadas en una sola secuencia
+        aps.m13flatMap(listadoEmpleados);
+
+        //agrupacion segun departamento
+        aps.m14GroupBy(listadoEmpleados);
+
+        //stream order
+        aps.m15Order();
 
 
 
